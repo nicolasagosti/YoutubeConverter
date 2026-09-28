@@ -69,9 +69,17 @@ ProgressFn = Callable[[str, Optional[float]], None]
 class TranscriptionError(Exception):
     """Error cuyo mensaje se puede mostrar tal cual al usuario."""
 
+    code: str | None = None  # permite a la interfaz ofrecer ayuda específica
+
 
 class SubtitlesUnavailable(TranscriptionError):
     """El video no tiene subtítulos utilizables (en modo auto se recurre a Whisper)."""
+
+
+class YouTubeBlocked(SubtitlesUnavailable):
+    """YouTube rechazó la consulta por venir de la IP de un servidor en la nube."""
+
+    code = "blocked"
 
 
 @dataclass
@@ -229,9 +237,9 @@ def _subtitles_error(exc: CouldNotRetrieveTranscript) -> TranscriptionError:
     if isinstance(exc, TranscriptsDisabled):
         return SubtitlesUnavailable("El video no tiene subtítulos.")
     if isinstance(exc, (IpBlocked, RequestBlocked)):
-        return SubtitlesUnavailable(
-            "YouTube bloqueó la descarga de subtítulos desde la IP de este servidor "
-            "(suele pasar en servidores en la nube; se soluciona con un proxy, ver README)."
+        return YouTubeBlocked(
+            "YouTube bloqueó la consulta que hizo el servidor de esta página. "
+            "No es un problema del video ni de tu conexión."
         )
     return SubtitlesUnavailable("No se pudieron obtener los subtítulos del video.")
 
@@ -418,7 +426,8 @@ def transcribe(
             if method == "subtitles":
                 raise
             if not whisper_available():
-                raise TranscriptionError(f"{exc} {WHISPER_UNAVAILABLE}") from exc
+                # Se conserva el tipo de error para no perder su código.
+                raise type(exc)(f"{exc} {WHISPER_UNAVAILABLE}") from exc
             notice = f"{exc} Se transcribió el audio con Whisper."
 
     segments, lang, yt_title = transcribe_audio(video_id, language, model, report)

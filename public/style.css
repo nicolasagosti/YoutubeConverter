@@ -185,6 +185,33 @@ button.primary:hover:not(:disabled) { background: var(--accent-hover); border-co
   background: var(--accent); opacity: .7;
 }
 
+.info a, .proxy a, .error a { color: var(--accent); text-underline-offset: 2px; }
+
+/* Explicación del bloqueo de YouTube y del proxy */
+.proxy { scroll-margin-top: 16px; }
+.proxy h2 { margin: 0 0 12px; font-size: 1.05rem; letter-spacing: -0.01em; }
+.proxy h3 { margin: 22px 0 10px; font-size: .95rem; }
+.proxy p, .proxy li { color: var(--muted); font-size: .92rem; }
+.proxy p { margin: 0 0 10px; }
+.proxy strong { color: var(--text); font-weight: 600; }
+.proxy code {
+  font: .85em ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  background: var(--field); border: 1px solid var(--border);
+  border-radius: 6px; padding: 1px 6px; color: var(--text);
+  overflow-wrap: anywhere;
+}
+.admin {
+  margin-top: 22px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--field); padding: 14px 16px;
+}
+.admin summary { cursor: pointer; font-weight: 600; color: var(--text); }
+.admin[open] summary { margin-bottom: 16px; }
+.admin p:last-child { margin-bottom: 0; }
+.admin .steps { margin-bottom: 16px; }
+.envs { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.error a { display: inline-block; margin-top: 6px; font-weight: 600; }
+html { scroll-behavior: smooth; }
+
 @media (max-width: 520px) {
   .wrap { padding-top: 28px; }
   h1 { font-size: 1.4rem; }

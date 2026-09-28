@@ -168,8 +168,8 @@
           </li>
           <li data-whisper="false">
             <strong>YouTube puede bloquear el servidor.</strong> YouTube limita las consultas que llegan
-            desde servidores en la nube. Si ves un error que dice que YouTube bloqueó la descarga, no es
-            un problema del video: podés probar de nuevo en unos minutos.
+            desde servidores en la nube. Si ves un error que dice que YouTube bloqueó la consulta, no es
+            un problema del video. <a href="#proxy">Más abajo te explicamos por qué pasa y cómo se soluciona</a>.
           </li>
           <li>
             <strong>No se guarda nada.</strong> La página no guarda tus transcripciones: si la cerrás o la
@@ -177,6 +177,95 @@
           </li>
         </ul>
       </div>
+    </section>
+
+    <section id="proxy" class="card proxy" data-whisper="false">
+      <h2>¿Por qué a veces YouTube bloquea esta página?</h2>
+      <p>
+        Cuando pegás un enlace, no es tu computadora la que le pide los subtítulos a YouTube: se los pide
+        el servidor donde está alojada esta página, que funciona en un centro de datos en la nube.
+        YouTube desconfía de las consultas que llegan desde esos lugares, porque muchos programas
+        automáticos los usan para descargar contenido en masa, y a veces las bloquea.
+      </p>
+      <p>
+        <strong>No es un problema del video ni de tu conexión</strong>, y no tenés que configurar nada
+        en tu computadora.
+      </p>
+
+      <h3>¿Qué podés hacer?</h3>
+      <ul class="limits">
+        <li><strong>Probar de nuevo en unos minutos.</strong> A veces el bloqueo es temporal.</li>
+        <li>
+          <strong>Usar la versión para computadora.</strong> Si instalás la app en tu compu, las consultas
+          salen desde tu propia conexión y YouTube normalmente no las bloquea. Además puede transcribir
+          videos sin subtítulos. Requiere instalar Python; las instrucciones están en
+          <a href="https://github.com/nicolasagosti/YoutubeConverter" target="_blank" rel="noopener">GitHub</a>.
+        </li>
+      </ul>
+
+      <h3>¿Qué es un proxy y cómo lo soluciona?</h3>
+      <p>
+        Un <strong>proxy</strong> es un intermediario: en vez de hablar directamente con YouTube, el
+        servidor le pasa el pedido a otra computadora, y esa computadora lo hace por él. Es como pedirle
+        a un vecino que haga un trámite por vos.
+      </p>
+      <p>
+        Si el intermediario es un <strong>proxy residencial</strong>, el pedido sale desde conexiones de
+        hogares comunes, como la tuya. Para YouTube parece una persona más mirando videos, así que
+        normalmente no lo bloquea. Además va cambiando de dirección: si una queda bloqueada, se prueba
+        con otra.
+      </p>
+      <p>
+        El proxy lo configura una sola vez quien administra la página. Si el error aparece siempre, lo
+        más probable es que esta página todavía no tenga uno configurado.
+      </p>
+
+      <details class="admin">
+        <summary>¿Administrás esta página? Cómo activar el proxy, paso a paso</summary>
+        <ol class="steps">
+          <li>
+            <strong>Creá una cuenta en Webshare</strong>
+            (<a href="https://www.webshare.io/" target="_blank" rel="noopener">webshare.io</a>).
+            Es el proveedor que recomienda la librería que usa esta app para leer subtítulos.
+            Es un servicio pago.
+          </li>
+          <li>
+            <strong>Comprá un plan «Residential».</strong> Ojo: los planes «Proxy Server» y
+            «Static Residential» no sirven para esto, porque usan direcciones fijas que YouTube
+            termina bloqueando.
+          </li>
+          <li>
+            <strong>Copiá tus datos de acceso.</strong> En el panel de Webshare, abrí
+            <a href="https://dashboard.webshare.io/proxy/settings" target="_blank" rel="noopener">Proxy Settings</a>
+            y copiá los valores «Proxy Username» y «Proxy Password».
+          </li>
+          <li>
+            <strong>Cargalos en Vercel.</strong> Abrí tu proyecto en vercel.com, andá a
+            <em>Settings → Environment Variables</em> y agregá estas dos variables:
+            <span class="envs">
+              <span><code>WEBSHARE_PROXY_USERNAME</code> → tu «Proxy Username»</span>
+              <span><code>WEBSHARE_PROXY_PASSWORD</code> → tu «Proxy Password»</span>
+            </span>
+            Vercel las guarda cifradas: solo las ve quien tiene acceso a tu proyecto, nunca los visitantes.
+          </li>
+          <li>
+            <strong>Volvé a publicar la página.</strong> Las variables nuevas solo se aplican en una
+            publicación nueva. En <em>Deployments</em>, abrí el menú <em>⋯</em> de la última publicación
+            y elegí <em>Redeploy</em>. También sirve subir un commit nuevo a GitHub.
+          </li>
+          <li>
+            <strong>Probá con un video.</strong> Si todavía falla, esperá unos minutos y reintentá.
+          </li>
+        </ol>
+        <p>
+          ¿Usás otro proveedor de proxies? En lugar de las dos variables anteriores, cargá una sola:
+          <code>PROXY_URL</code>, con el formato <code>http://usuario:contraseña@servidor:puerto</code>.
+        </p>
+        <p>
+          El proxy residencial es la solución más confiable, pero no garantiza que YouTube no vuelva a
+          bloquear alguna consulta.
+        </p>
+      </details>
     </section>
   </main>
   <script src="app.js"></script>

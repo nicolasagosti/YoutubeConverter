@@ -61,7 +61,7 @@ def start_job():
         try:
             result = transcriber.transcribe(url, method, language, model)
         except transcriber.TranscriptionError as exc:
-            return jsonify(error=str(exc)), 422
+            return jsonify(error=str(exc), code=exc.code), 422
         return jsonify(result=result.to_dict())
 
     job = {
@@ -71,6 +71,7 @@ def start_job():
         "progress": None,
         "result": None,
         "error": None,
+        "code": None,
         "created": time.time(),
     }
     with jobs_lock:
@@ -92,7 +93,7 @@ def _run_job(job: dict, url: str, method: str, language: str | None, model: str)
         job["result"] = transcriber.transcribe(url, method, language, model, progress).to_dict()
         job["status"] = "done"
     except transcriber.TranscriptionError as exc:
-        job["error"], job["status"] = str(exc), "error"
+        job["error"], job["code"], job["status"] = str(exc), exc.code, "error"
     except Exception as exc:  # noqa: BLE001 - cualquier fallo debe llegar a la interfaz
         app.logger.exception("Error inesperado al transcribir %s", url)
         job["error"], job["status"] = f"Error inesperado: {exc}", "error"
@@ -103,7 +104,7 @@ def get_job(job_id: str):
     job = jobs.get(job_id)
     if job is None:
         return jsonify(error="La tarea no existe o ya expiró."), 404
-    return jsonify({k: job[k] for k in ("status", "message", "progress", "result", "error")})
+    return jsonify({k: job[k] for k in ("status", "message", "progress", "result", "error", "code")})
 
 
 if __name__ == "__main__":

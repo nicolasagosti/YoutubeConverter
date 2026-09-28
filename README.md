@@ -75,7 +75,10 @@ La interfaz lo detecta y oculta sus opciones.
    Vercel detecta Flask solo (`app.py` con la variable `app`); no hace falta configurar nada.
 3. Presioná **Deploy**.
 
-### Si aparece "YouTube bloqueó la descarga de subtítulos…"
+### Si aparece "YouTube bloqueó la consulta que hizo el servidor…"
+
+La página misma explica este error a los visitantes, en la sección "¿Por qué a veces YouTube
+bloquea esta página?", con una guía paso a paso para quien la administra.
 
 YouTube bloquea la mayoría de las IPs de servidores en la nube, y Vercel corre sobre AWS.
 Es muy probable que sin un proxy la versión online no pueda leer subtítulos.

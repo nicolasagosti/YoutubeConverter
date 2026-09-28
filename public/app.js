@@ -48,7 +48,7 @@ $("form").addEventListener("submit", async (event) => {
       }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "No se pudo iniciar la conversión.");
+    if (!res.ok) throw apiError(data, "No se pudo iniciar la conversión.");
     // Sin Whisper el servidor responde el resultado directamente; si no, devuelve una tarea.
     if (data.result) showResult(data.result);
     else poll(data.id);
@@ -61,12 +61,12 @@ async function poll(jobId) {
   try {
     const res = await fetch(`/api/jobs/${jobId}`);
     const job = await res.json();
-    if (!res.ok) throw new Error(job.error);
+    if (!res.ok) throw apiError(job);
 
     if (job.status === "done") {
       showResult(job.result);
     } else if (job.status === "error") {
-      throw new Error(job.error);
+      throw apiError(job);
     } else {
       showStatus(job.message, job.progress);
       setTimeout(() => poll(jobId), 800);
@@ -90,12 +90,26 @@ function showStatus(message, progress) {
   $("status").querySelector(".bar").classList.toggle("indeterminate", !known);
 }
 
+function apiError(data, fallback) {
+  const err = new Error(data.error || fallback);
+  err.code = data.code;
+  return err;
+}
+
 function fail(err) {
   setBusy(false);
   $("status").hidden = true;
-  $("error").textContent =
+  const box = $("error");
+  box.textContent =
     err instanceof TypeError ? "No se pudo conectar con el servidor. ¿Sigue corriendo app.py?" : err.message;
-  $("error").hidden = false;
+  // Si YouTube bloqueó al servidor, se enlaza la explicación que está más abajo.
+  if (err.code === "blocked" && !$("proxy").hidden) {
+    const link = document.createElement("a");
+    link.href = "#proxy";
+    link.textContent = "¿Por qué pasa esto y cómo se soluciona?";
+    box.append(document.createElement("br"), link);
+  }
+  box.hidden = false;
 }
 
 function showResult(data) {
