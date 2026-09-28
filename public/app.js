@@ -9,6 +9,9 @@ fetch("/api/config")
   .then((res) => res.json())
   .then((config) => {
     whisperEnabled = config.whisper;
+    document.querySelectorAll("[data-whisper]").forEach((el) => {
+      el.hidden = el.dataset.whisper !== String(whisperEnabled);
+    });
     if (whisperEnabled) return;
     $("method").value = "subtitles";
     $("method-field").hidden = true;

@@ -109,6 +109,75 @@
       </div>
       <div id="output" class="output" tabindex="0"></div>
     </section>
+
+    <!-- Los elementos con data-whisper se muestran según el servidor tenga Whisper o no (ver app.js). -->
+    <section class="info" aria-label="Información">
+      <div>
+        <h2>¿Cómo funciona?</h2>
+        <ol class="steps">
+          <li>
+            <strong>Pegá el enlace.</strong> Sirve cualquier formato de YouTube: videos, Shorts,
+            enlaces cortos (youtu.be) o transmisiones que ya terminaron.
+          </li>
+          <li>
+            <strong>Se buscan los subtítulos.</strong> La app usa los subtítulos del video: primero
+            los que cargó el creador y, si no hay, los que YouTube genera automáticamente.
+            No se descarga el video, por eso tarda apenas unos segundos.
+          </li>
+          <li data-whisper="true" hidden>
+            <strong>Si no hay subtítulos, se transcribe el audio.</strong> Se descarga solo el sonido
+            y lo pasa a texto Whisper, un modelo de reconocimiento de voz que corre en esta computadora.
+          </li>
+          <li>
+            <strong>Leé, copiá o descargá.</strong> El texto aparece ordenado en párrafos. También podés
+            verlo con marcas de tiempo y descargarlo como .txt o como .srt (el formato de subtítulos
+            que usan los reproductores y editores de video).
+          </li>
+        </ol>
+        <p>
+          En <strong>Opciones</strong> podés elegir el idioma del texto. Si el video no lo tiene,
+          se intenta la traducción automática de YouTube.
+        </p>
+      </div>
+
+      <div>
+        <h2>Limitaciones</h2>
+        <ul class="limits">
+          <li data-whisper="false">
+            <strong>Solo videos con subtítulos.</strong> Si el video no tiene subtítulos, ni siquiera
+            automáticos, esta versión online no lo puede convertir. Pasa con videos sin voz, videos
+            recién subidos o cuando el creador los desactivó.
+          </li>
+          <li data-whisper="true" hidden>
+            <strong>Whisper tarda.</strong> Transcribir el audio puede llevar varios minutos: según el
+            modelo elegido y la computadora, desde una fracción de la duración del video hasta más que
+            el video entero.
+          </li>
+          <li>
+            <strong>Los subtítulos automáticos no son perfectos.</strong> Suelen venir sin puntuación
+            y pueden confundir palabras o nombres propios, sobre todo con ruido de fondo o varias
+            personas hablando a la vez.
+          </li>
+          <li>
+            <strong>La traducción no siempre está disponible.</strong> YouTube a veces no la permite;
+            en ese caso vas a ver el texto en el idioma original, con un aviso.
+          </li>
+          <li>
+            <strong>Videos privados o restringidos.</strong> No funcionan los videos privados, los que
+            tienen restricción de edad ni los que piden iniciar sesión.
+          </li>
+          <li data-whisper="false">
+            <strong>YouTube puede bloquear el servidor.</strong> YouTube limita las consultas que llegan
+            desde servidores en la nube. Si ves un error que dice que YouTube bloqueó la descarga, no es
+            un problema del video: podés probar de nuevo en unos minutos.
+          </li>
+          <li>
+            <strong>No se guarda nada.</strong> La página no guarda tus transcripciones: si la cerrás o la
+            recargás, se pierden. Descargalas si las vas a necesitar.
+          </li>
+        </ul>
+      </div>
+    </section>
   </main>
   <script src="app.js"></script>
 </body>

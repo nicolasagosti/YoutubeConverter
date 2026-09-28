@@ -155,6 +155,36 @@ button.primary:hover:not(:disabled) { background: var(--accent-hover); border-co
 }
 .output.mono { font: .88rem/1.7 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
 
+/* Información: cómo funciona y limitaciones */
+.info {
+  display: grid; gap: 28px 36px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-top: 18px; padding-top: 30px;
+  border-top: 1px solid var(--border);
+}
+.info h2 { margin: 0 0 14px; font-size: 1.05rem; letter-spacing: -0.01em; }
+.info p, .info li { color: var(--muted); font-size: .92rem; }
+.info p { margin: 14px 0 0; }
+.info strong { color: var(--text); font-weight: 600; }
+.steps, .limits { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.steps { counter-reset: step; }
+.steps li { counter-increment: step; position: relative; padding-left: 36px; }
+.steps li::before {
+  content: counter(step);
+  position: absolute; left: 0; top: 0;
+  width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent);
+  font-size: .8rem; font-weight: 650;
+}
+.limits li { position: relative; padding-left: 18px; }
+.limits li::before {
+  content: "";
+  position: absolute; left: 3px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); opacity: .7;
+}
+
 @media (max-width: 520px) {
   .wrap { padding-top: 28px; }
   h1 { font-size: 1.4rem; }
