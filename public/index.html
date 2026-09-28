@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouTube → Texto</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+      </div>
+      <div>
+        <h1>YouTube → Texto</h1>
+        <p class="lead">Pegá el enlace de un video y obtené su transcripción completa.</p>
+      </div>
+    </header>
+
+    <form id="form" class="card" novalidate>
+      <label for="url" class="sr-only">URL del video de YouTube</label>
+      <div class="url-row">
+        <input id="url" type="text" inputmode="url" autocomplete="off" spellcheck="false" autofocus
+               placeholder="https://www.youtube.com/watch?v=…">
+        <button id="submit" type="submit" class="primary">Convertir</button>
+      </div>
+
+      <details class="options">
+        <summary>Opciones</summary>
+        <div class="grid">
+          <label id="method-field">Método
+            <select id="method">
+              <option value="auto">Automático (subtítulos o Whisper)</option>
+              <option value="subtitles">Solo subtítulos de YouTube</option>
+              <option value="whisper">Solo Whisper (transcribir el audio)</option>
+            </select>
+          </label>
+          <label>Idioma
+            <select id="language">
+              <option value="">Original del video</option>
+              <option value="es">Español</option>
+              <option value="en">Inglés</option>
+              <option value="pt">Portugués</option>
+              <option value="fr">Francés</option>
+              <option value="it">Italiano</option>
+              <option value="de">Alemán</option>
+              <option value="ru">Ruso</option>
+              <option value="ja">Japonés</option>
+              <option value="ko">Coreano</option>
+              <option value="zh">Chino</option>
+              <option value="ar">Árabe</option>
+              <option value="hi">Hindi</option>
+            </select>
+          </label>
+          <label id="model-field">Modelo Whisper
+            <select id="model">
+              <option value="tiny">tiny · muy rápido, menos preciso</option>
+              <option value="base" selected>base · rápido</option>
+              <option value="small">small · equilibrado</option>
+              <option value="medium">medium · preciso, lento</option>
+              <option value="large-v3">large-v3 · máxima precisión, muy lento</option>
+            </select>
+          </label>
+        </div>
+        <p class="hint" id="hint">
+          Los subtítulos de YouTube se obtienen al instante. Whisper transcribe el audio en tu
+          computadora: sirve para videos sin subtítulos, pero tarda más (la primera vez descarga el modelo).
+          Si elegís un idioma y el video no lo tiene, se intenta usar la traducción automática de YouTube.
+        </p>
+      </details>
+    </form>
+
+    <section id="status" class="card status" hidden>
+      <div class="status-row">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="status-msg">Iniciando…</span>
+        <span id="status-pct" class="muted"></span>
+      </div>
+      <div class="bar"><div id="bar-fill"></div></div>
+    </section>
+
+    <section id="error" class="card error" role="alert" hidden></section>
+
+    <section id="result" class="card" hidden>
+      <div class="video">
+        <a id="thumb-link" target="_blank" rel="noopener"><img id="thumb" alt=""></a>
+        <div class="video-info">
+          <a id="title" target="_blank" rel="noopener"></a>
+          <div id="author" class="muted"></div>
+          <div class="meta">
+            <span id="source" class="badge"></span>
+            <span id="stats" class="muted"></span>
+          </div>
+        </div>
+      </div>
+      <p id="notice" class="notice" hidden></p>
+
+      <div class="toolbar">
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" data-view="text" role="tab">Texto</button>
+          <button type="button" class="tab" data-view="timestamped" role="tab">Con tiempos</button>
+        </div>
+        <div class="actions">
+          <button type="button" id="copy">Copiar</button>
+          <button type="button" id="dl-txt">Descargar .txt</button>
+          <button type="button" id="dl-srt">Descargar .srt</button>
+        </div>
+      </div>
+      <div id="output" class="output" tabindex="0"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

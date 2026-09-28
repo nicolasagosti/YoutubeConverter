@@ -1,0 +1,5 @@
+# Instalación completa para usar la app en tu computadora:
+# agrega la transcripción del audio con Whisper.
+-r requirements.txt
+yt-dlp>=2026.8.19
+faster-whisper>=1.2
